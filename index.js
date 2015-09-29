@@ -9,5 +9,6 @@ module.exports = {
       'simwms-build:nojs': require('./lib/commands/nojs'),
       'simwms-build:init': require('./lib/commands/init')
     };
-  }
+  },
+  Machine: require("./lib/simwms-build/machine")
 };
