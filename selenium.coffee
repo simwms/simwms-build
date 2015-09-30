@@ -14,9 +14,9 @@ module.exports = ({webdriver, chrome, firefox}) ->
   .setChromeOptions(chromeOptions)
   .build()
 
-  console.log "about to use machine"
+  # console.log "about to use machine"
   machine = Machine.using(driver, webdriver)
-  console.log "using machine"
+  # console.log "using machine"
   promise = machine.buildApp(Paths)
-  console.log "starting build"
+  # console.log "starting build"
   promise.then -> driver.quit()

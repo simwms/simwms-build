@@ -61,10 +61,9 @@ module.exports =
       cwd: root
       script: options.script
 
-    startServer(execOptions)
-    .then (server) ->
-      runSelenium(seleOptions)
-      .finally -> server.kill()
+    runSelenium(seleOptions)
+    .then ->
+      runCmd("kill `lsof -t -i:4200`", execOptions)
     .then ->
       runCmd("git checkout #{options.branch}", execOptions)
     .then ->
