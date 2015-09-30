@@ -1,6 +1,6 @@
 {
   "name": "simwms-build",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Custom build stage for my ember junk",
   "directories": {
     "doc": "doc",
