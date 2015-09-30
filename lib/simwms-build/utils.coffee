@@ -1,22 +1,26 @@
 RSVP = require 'rsvp'
-{exec, spawn} = require "child_process"
+{exec} = require "child_process"
+
+buildSuccess = /build success/i
 
 startServer = (opts) ->
   new RSVP.Promise (resolve, reject) ->
-    child = spawn("ember", ["s", "-prod", "--live-reload=false"], opts)
-    child.stdout.on "data", (data) ->
-      console.log data
-      buildSuccess = /build success/i
-      if buildSuccess.exec(data)?
-        resolve child
-
-    child.stderr.on "data", (data) ->
-      console.log data
-      reject child
-
-    child.on "close", (code) ->
-      console.log "process exited with #{code}"
-      reject child
+    child = exec "ember s -prod --live-reload=false", opts, (error, stdout, stderr) ->
+      console.log error
+      console.log stderr
+      console.log stdout
+      switch
+        when error?
+          reject(error)
+          child.kill('SIGINT')
+        when stderr?
+          reject(error)
+          child.kill('SIGINT')
+        when buildSuccess.exec(stdout)?
+          console.log stdout
+          resolve child
+        else
+          console.log "waiting..."
 
 runCmd = (cmd, opts) ->
   new RSVP.Promise (resolve, reject) ->
