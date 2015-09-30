@@ -1,4 +1,4 @@
-{runCmd} = require "../simwms-build/utils"
+{runCmd, startServer} = require "../simwms-build/utils"
 path = require('path')
 
 ScriptOpt =
@@ -26,21 +26,21 @@ MessageOpt =
   description: "The commit message"
 
 runSelenium = ({cwd, script}) ->
-  console.log cwd
-  console.log script
+  # console.log cwd
+  # console.log script
   seleniumScript = require(path.join(cwd, script))
-  console.log seleniumScript
+  # console.log seleniumScript
   chromedriver = require('chromedriver')
-  console.log "chromedriver"
+  # console.log "chromedriver"
   webdriver = require('selenium-webdriver')
-  console.log "webdriver"
+  # console.log "webdriver"
   chrome = require('selenium-webdriver/chrome')
-  console.log "chrome"
+  # console.log "chrome"
   firefox = require('selenium-webdriver/firefox')
-  console.log "firefox"
+  # console.log "firefox"
 
   process.env.PATH = process.env.PATH + path.delimiter + path.dirname(chromedriver.path)
-  console.log "got here"
+  # console.log "got here"
   seleniumScript
     webdriver: webdriver
     chrome: chrome
@@ -61,7 +61,10 @@ module.exports =
       cwd: root
       script: options.script
 
-    runSelenium(seleOptions)
+    startServer(execOptions)
+    .then (server) ->
+      runSelenium(seleOptions)
+      .finally -> server.kill()
     .then ->
       runCmd("git checkout #{options.branch}", execOptions)
     .then ->
@@ -69,7 +72,7 @@ module.exports =
     .then ->
       runCmd("cp -R selenium-dist/* .", execOptions)
     .then ->
-      runCmd("git add . --all && git commit -m '#{options.message}'", execOptions)
+      runCmd("git add -A && git commit -m '#{options.message}'", execOptions)
     .then ->
       runCmd("git checkout `git reflog HEAD | sed -n " +
         "'/checkout/ !d; s/.* \\(\\S*\\)$/\\1/;p' | sed '2 !d'`", execOptions)
