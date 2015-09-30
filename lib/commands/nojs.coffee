@@ -71,7 +71,7 @@ module.exports =
     .then ->
       runCmd("git add . --all && git commit -m '#{options.message}'", execOptions)
     .then ->
-      runCommand("git checkout `git reflog HEAD | sed -n " +
+      runCmd("git checkout `git reflog HEAD | sed -n " +
         "'/checkout/ !d; s/.* \\(\\S*\\)$/\\1/;p' | sed '2 !d'`", execOptions)
     .then ->
       ui.write "should be good to push"
