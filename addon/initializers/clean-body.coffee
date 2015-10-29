@@ -1,6 +1,6 @@
 # Takes two parameters: container and application
 initialize = ->
-  Ember.$("body").empty()
+  Ember.$('#ember-app').empty()
   # application.register 'route', 'foo', 'service:foo'
 
 CleanBodyInitializer =
